@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Emotion Recognition</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-microphone-alt"></i>
+                <span>SpeechEmotion</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#detector" class="nav-link">Detector</a></li>
+                <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+    </div>
+
+    <!-- Home Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="gradient-text">Speech Emotion</span>
+                        <span class="gradient-text">Recognition</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Detect and classify human emotions from speech using advanced AI technology.
+                        Our deep learning model analyzes voice patterns to identify happiness, sadness, anger, and neutrality.
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="scrollToSection('detector')">
+                            <i class="fas fa-play"></i>
+                            Try Now
+                        </button>
+                        <button class="btn btn-secondary" onclick="scrollToSection('how-it-works')">
+                            <i class="fas fa-info-circle"></i>
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="sound-visualizer">
+                        <div class="sound-bar" style="--delay: 0s"></div>
+                        <div class="sound-bar" style="--delay: 0.1s"></div>
+                        <div class="sound-bar" style="--delay: 0.2s"></div>
+                        <div class="sound-bar" style="--delay: 0.3s"></div>
+                        <div class="sound-bar" style="--delay: 0.4s"></div>
+                        <div class="sound-bar" style="--delay: 0.5s"></div>
+                        <div class="sound-bar" style="--delay: 0.6s"></div>
+                    </div>
+                    <div class="emotion-icons">
+                        <div class="emotion-icon" style="--delay: 0s">😊</div>
+                        <div class="emotion-icon" style="--delay: 0.5s">😢</div>
+                        <div class="emotion-icon" style="--delay: 1s">😡</div>
+                        <div class="emotion-icon" style="--delay: 1.5s">😐</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emotion Detector Section -->
+    <section id="detector" class="detector-section">
+        <div class="container">
+            <h2 class="section-title">Emotion Detector</h2>
+            <p class="section-subtitle">Upload an audio file or record your voice to analyze emotions</p>
+            
+            <div class="detector-container">
+                <div class="upload-section">
+                    <div class="upload-card">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>Upload Audio File</h3>
+                        <p>Choose an audio file (MP3, WAV, M4A)</p>
+                        <input type="file" id="audioFile" accept="audio/*" style="display: none;">
+                        <button class="btn btn-outline" onclick="document.getElementById('audioFile').click()">
+                            <i class="fas fa-upload"></i>
+                            Choose File
+                        </button>
+                        <div id="fileName" class="file-name"></div>
+                    </div>
+                    
+                    <div class="divider">
+                        <span>OR</span>
+                    </div>
+                    
+                    <div class="record-card">
+                        <div class="record-icon">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <h3>Record Voice</h3>
+                        <p>Record your voice for up to 40 seconds</p>
+                        <button class="btn btn-record" id="recordBtn">
+                            <i class="fas fa-microphone"></i>
+                            <span id="recordText">Start Recording</span>
+                        </button>
+                        <div class="recording-indicator" id="recordingIndicator">
+                            <div class="pulse"></div>
+                            <span>Recording...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analyze-section">
+                    <button class="btn btn-analyze" id="analyzeBtn" disabled>
+                        <i class="fas fa-brain"></i>
+                        Analyze Emotion
+                    </button>
+                    
+                    <div class="loading" id="loadingIndicator">
+                        <div class="spinner"></div>
+                        <p>Analyzing your voice...</p>
+                    </div>
+                </div>
+                
+                <div class="result-section" id="resultSection">
+                    <div class="result-card">
+                        <h3>Emotion Analysis Result</h3>
+                        <div class="emotion-result">
+                            <div class="emotion-emoji" id="emotionEmoji">😊</div>
+                            <div class="emotion-details">
+                                <h4 id="emotionName">Happy</h4>
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" id="confidenceFill"></div>
+                                </div>
+                                <p class="confidence-text">Confidence: <span id="confidenceScore">85%</span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="emotion-breakdown">
+                            <h4>Emotion Breakdown</h4>
+                            <div class="emotion-bars">
+                                <div class="emotion-bar">
+                                    <span>😊 Happy</span>
+                                    <div class="bar"><div class="fill" data-emotion="happy"></div></div>
+                                    <span class="percentage" data-emotion="happy">0%</span>
+                                </div>
+                                <div class="emotion-bar">
+                                    <span>😢 Sad</span>
+                                    <div class="bar"><div class="fill" data-emotion="sad"></div></div>
+                                    <span class="percentage" data-emotion="sad">0%</span>
+                                </div>
+                                <div class="emotion-bar">
+                                    <span>😡 Angry</span>
+                                    <div class="bar"><div class="fill" data-emotion="angry"></div></div>
+                                    <span class="percentage" data-emotion="angry">0%</span>
+                                </div>
+                                <div class="emotion-bar">
+                                    <span>😐 Neutral</span>
+                                    <div class="bar"><div class="fill" data-emotion="neutral"></div></div>
+                                    <span class="percentage" data-emotion="neutral">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Understanding the AI behind emotion recognition</p>
+            
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="step-icon">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <h3>Audio Input</h3>
+                    <p>Voice recording or audio file is captured and preprocessed</p>
+                </div>
+                
+                <div class="flow-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-icon">
+                        <i class="fas fa-wave-square"></i>
+                    </div>
+                    <h3>Feature Extraction</h3>
+                    <p>MFCC features are extracted from the audio signal</p>
+                </div>
+                
+                <div class="flow-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI Analysis</h3>
+                    <p>CNN + LSTM model processes features to classify emotions</p>
+                </div>
+                
+                <div class="flow-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Results</h3>
+                    <p>Emotion classification with confidence scores</p>
+                </div>
+            </div>
+            
+            <div class="tech-details">
+                <div class="tech-card">
+                    <h3>🧠 Deep Learning Model</h3>
+                    <p>Our model combines Convolutional Neural Networks (CNN) for feature learning and Long Short-Term Memory (LSTM) networks for temporal pattern recognition.</p>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>🎵 MFCC Features</h3>
+                    <p>Mel-Frequency Cepstral Coefficients capture the most important characteristics of human speech for emotion recognition.</p>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>📊 Multi-Class Classification</h3>
+                    <p>The model classifies emotions into four categories: Happy, Sad, Angry, and Neutral with confidence scores.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">About This Project</h2>
+            
+            <div class="about-content">
+                <div class="project-info">
+                    <h3>Project Overview</h3>
+                    <p>
+                        Speech Emotion Recognition is an advanced AI project developed as part of my MTech Software Engineering 
+                        studies at VIT Vellore. This project leverages deep learning to analyze and classify human emotions 
+                        from voice patterns. Using a combination of CNN and LSTM neural networks, the model can accurately 
+                        identify emotional states in speech with high precision.
+                    </p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <i class="fas fa-microphone"></i>
+                            <h4>Real-time Analysis</h4>
+                            <p>Instant emotion detection from live audio input</p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="fas fa-chart-line"></i>
+                            <h4>High Accuracy</h4>
+                            <p>85%+ accuracy on emotion classification</p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="fas fa-mobile-alt"></i>
+                            <h4>Cross-Platform</h4>
+                            <p>Works on desktop, tablet, and mobile devices</p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <h4>Privacy First</h4>
+                            <p>All processing happens locally in your browser</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="developer-section">
+                    <h3>Developer</h3>
+                    <div class="developer-card">
+                        <div class="developer-avatar">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="developer-info">
+                            <h4>Santhosh</h4>
+                            <p class="degree">MTech Software Engineering</p>
+                            <p class="university">VIT Vellore Campus</p>
+                            <p class="specialization">AI/ML & Deep Learning Specialist</p>
+                            <div class="social-links">
+                                <a href="https://github.com/santhosh-2305" title="GitHub"><i class="fab fa-github"></i></a>
+                                <a href="https://linkedin.com/in/santhosh-2305" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                                <a href="mailto:santhoshp232004@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+                                <a href="https://santhosh-2305.github.io" title="Portfolio"><i class="fas fa-globe"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-code"></i>
+                            <h4>Technologies Used</h4>
+                            <p>Python, TensorFlow, Keras, Librosa, HTML/CSS/JS</p>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <i class="fas fa-database"></i>
+                            <h4>Dataset</h4>
+                            <p>RAVDESS Emotional Speech Audio Dataset</p>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h4>Academic Project</h4>
+                            <p>MTech Software Engineering - VIT Vellore</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-microphone-alt"></i>
+                        <span>SpeechEmotion</span>
+                    </div>
+                    <p>Advanced AI-powered emotion recognition from speech patterns.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#detector">Detector</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <div class="contact-info">
+                        <a href="mailto:santhoshp232004@gmail.com">
+                            <i class="fas fa-envelope"></i>
+                            santhoshp232004@gmail.com
+                        </a>
+                        <a href="https://github.com/santhosh-2305/speech-emotion-recognition">
+                            <i class="fab fa-github"></i>
+                            GitHub Repository
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Santhosh - MTech Software Engineering, VIT Vellore. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
